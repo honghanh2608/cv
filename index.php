@@ -6,10 +6,10 @@ if (!array_key_exists("cv_id", $_COOKIE)) {
 $id = $_COOKIE["cv_id"];
 $err = [];
 $con = mysqli_connect("localhost", "root", "", "cv");
-$res = mysqli_query($con, "SELECT * FROM fields");
+$res = mysqli_query($con, "SELECT fieldid, name, display, content from fields INNER JOIN user_fields ON user_fields.fieldid = fields.id WHERE user_fields.userid = $id");
 $fields = [];
 while ($row = mysqli_fetch_row($res)) {
-    $field = (object)['id' => $row[0], 'name' => $row[1], 'display' => 1];
+    $field = (object)['id' => $row[0], 'name' => $row[1], 'display' => $row[2], 'content' => $row[3]];
     array_push($fields, $field);
 }
 
@@ -28,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'change_field') 
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'save') {
-    echo "save";
     $fullname = $birthday = $gender = $address = $email = $phone = $avatar = $position = "";
     $education = $society_activities = $working_process = $skills = $experiences = $certifications = $hobbies = $desire = "";
     $fullname = $_POST["fullname"];
@@ -38,14 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'save') {
     $email = $_POST["mail"];
     $phone = $_POST["phone"];
     $position = $_POST["pos_job"];
-    $education = $_POST["education"];
-    $society_activities = $_POST["society_activities"];
-    $working_process = $_POST["working_process"];
-    $skills = $_POST["skills"];
-    $experiences = $_POST["experiences"];
-    $certifications = $_POST["certifications"];
-    $hobbies = $_POST["hobbies"];
-    $desire = $_POST["desire"];
+
+
 
 
     //kiem tra
@@ -114,10 +107,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'save') {
     if (count($err) == 0) {
         //insert into DB
         $query = mysqli_query($con, "REPLACE INTO user_info VALUES ($id, '$fullname', '$birthday', '$gender', '$address', '$phone', '$email', '$target_file', '$position', '$education', '$working_process', '$society_activities', '$skills', '$experiences', '$certifications', '$hobbies', '$desire' )");
-
-
         if ($query) {
-            header("Location:topcv.php");
+            foreach ($fields as $field) {
+                if (array_key_exists($field->id, $_POST)) {
+                    $key = "".$field->id;
+                    $content = $_POST[$key];
+                    $result = mysqli_query($con, "REPLACE INTO user_fields VALUES ($id, $key, '$content', $field->display)");
+                    if (mysqli_error($con)) {
+                        echo mysqli_error($con);
+                    }
+                }
+            }
+            //$result = mysqli_query($con, "REPLACE INTO user_fields VALUES ($id, $field)")
+            //header("Location:topcv.php");
         } else {
             $err['insert'] = "Can not insert into database." . mysqli_error($con);
         }
@@ -352,66 +354,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'save') {
             <span id="change_field">Thay đổi trường hiển thị</span>
 
             <?php
+            //user field
             foreach ($fields as $field) {
                 if ($field->display == 1) {
                     echo "
                             <div class=\"row\">
                                 <div class=\"rowItem row_item_left\">
                                     <span>$field->name</span>
-                                    <textarea rows=\"3\" name=\"education\"></textarea>
+                                    <textarea rows=\"3\" name=\"$field->id\"></textarea>
                                 </div>
                             </div>
                         ";
                 }
             }
             ?>
-
-            <div class="row">
-                <div class="rowItem row_item_left">
-                    <span>Education process</span>
-                    <textarea rows="3" name="education"></textarea>
-                </div>
-            </div>
-
-            <div class="rowItem row_item_left">
-                <span>Working process</span>
-                <textarea rows="3" name="working"></textarea>
-            </div>
-
-            <div class="row">
-                <div class="rowItem row_item_left">
-                    <span>Society activities</span>
-                    <textarea rows="3" name="society_activities"></textarea>
-                </div>
-            </div>
-
-            <div class="rowItem row_item_left">
-                <span>Skills</span>
-                <textarea rows="3" name="skills"></textarea>
-            </div>
-
-            <div class="row">
-                <div class="rowItem row_item_left">
-                    <span>Experiences</span>
-                    <textarea rows="3" name="experiences"></textarea>
-                </div>
-            </div>
-
-            <div class="rowItem row_item_left">
-                <span>Certifications</span>
-                <textarea rows="3" name="certifications"></textarea>
-            </div>
-
-            <div class="row">
-                <div class="rowItem row_item_left">
-                    <span>Hobbies</span>
-                    <textarea rows="3" name="hobbies"></textarea>
-                </div>
-            </div>
-            <div class="rowItem row_item_left">
-                <span>Desire</span>
-                <textarea rows="3" name="desire"></textarea>
-            </div>
         </div>
         <br>
         <br>
@@ -427,6 +383,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit'] == 'save') {
         <div class="dialog">
             <form action="index.php" method="post">
                 <?php
+                //all field
                 foreach ($fields as $field) {
                     echo "
                             <div class=\"row\">

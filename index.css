@@ -1,0 +1,41 @@
+.dialog_container {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    background: #33666666;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.show {
+    visibility: visible;
+}
+
+.dialog {
+    background: white;
+    width: 200px;
+    padding: 50px 30px;
+}
+
+.dialog .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dialog .navbar {
+    display: flex;
+    flex-direction: row;
+}
+
+.dialog .navbar button {
+    flex: 1;
+}

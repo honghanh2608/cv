@@ -1,0 +1,35 @@
+    .container{
+    	display: flex;
+    	flex-direction: column;
+    	align-items: center;
+    }
+    .task_bar{
+    	display: flex;
+    	flex-direction: row;
+    	justify-content: space-around;
+    	margin-top: 25px;
+    	margin-bottom: 25px;
+    }
+    .search_bar{
+    	display: flex;
+    	flex-direction: row;
+    }
+    .search_container {
+    	display: inline-flex;
+    	flex: 1 1 300px;
+    	border: 1px solid #ccc;   	
+    	overflow: hidden;
+    }
+
+    .searchIcon {
+    	padding: 0.5rem;
+    }
+
+    .searchBox {
+    	border: 0;
+    	padding: 0.5rem 0.5rem 0.5rem 0;
+    	flex: 1;
+    }
+    .select_place_container{
+    	display: inline-flex;
+    }

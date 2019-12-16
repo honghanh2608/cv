@@ -1,0 +1,53 @@
+body {
+    background: #f7e0c1;
+    display: flex;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 10px;
+    padding: 150px 30px;
+    width: 33%;
+    height: 66%;
+    margin: auto;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.form_input {
+    flex: 1;
+    font-size: 14px;
+    font-family: 'Lato';
+}
+
+.field {
+    font-size: 12px;
+    font-family: 'Lato';
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.text_input {
+    border-radius: 5px;
+    border: #f7e0c1 solid 1px;
+    height: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.btn_submit {
+    width: 100%;
+    background-color: #f7e0c1;
+    border-radius: 5px;
+    border: none;
+    height: 50px;
+    font-family: 'Lato';
+    font-weight: bold;
+    font-size: 14px;
+}
